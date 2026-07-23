@@ -1,6 +1,6 @@
 {
   "name": "load-test-quiz",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "本地 Excel 题库自测做题程序",
   "main": "main.js",
   "scripts": {
