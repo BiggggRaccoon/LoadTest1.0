@@ -396,6 +396,10 @@
       alert('名称不能为空');
       return;
     }
+    if (banks.some((b) => b.id !== bankId && b.name === trimmed)) {
+      alert('已存在同名题库，请更换名称');
+      return;
+    }
     bank.name = trimmed;
     saveAll();
     renderBankList();
@@ -761,6 +765,10 @@
     const name = cellText(importNameInput.value);
     if (!name) {
       alert('请填写题库名称');
+      return;
+    }
+    if (banks.some((b) => b.name === name)) {
+      alert('已存在同名题库，请更换名称');
       return;
     }
     const bank = normalizeBank({
