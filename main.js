@@ -2,7 +2,7 @@
  * Electron 主进程
  * 负责创建窗口、打开本地文件对话框、读取 xlsx 文件内容
  */
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -19,12 +19,18 @@ function createWindow() {
     minWidth: 800,
     minHeight: 600,
     title: '题库自测',
+    // 窗口图标：使用项目中的 avatar.jpg
+    icon: path.join(__dirname, 'image', 'avatar.jpg'),
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false
     }
   });
+
+  // 彻底移除 File / Edit / View 等默认菜单栏
+  mainWindow.setMenuBarVisibility(false);
 
   mainWindow.loadFile('index.html');
 
@@ -33,6 +39,8 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  // 去掉应用级默认菜单
+  Menu.setApplicationMenu(null);
   createWindow();
 
   app.on('activate', () => {
