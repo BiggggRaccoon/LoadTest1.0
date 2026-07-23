@@ -25,6 +25,7 @@
       "buildResources": "build"
     },
     "icon": "build/icon.ico",
+    "afterPack": "./build/afterPack.js",
     "files": [
       "main.js",
       "preload.js",
@@ -37,6 +38,7 @@
     ],
     "win": {
       "icon": "build/icon.ico",
+      "signAndEditExecutable": false,
       "target": [
         {
           "target": "nsis",
