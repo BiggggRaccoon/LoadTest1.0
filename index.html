@@ -169,6 +169,22 @@
     </div>
   </div>
 
+  <!-- 重命名弹层 -->
+  <div id="modal-rename" class="modal hidden">
+    <div class="modal-card">
+      <h2>重命名题库</h2>
+      <p class="subtitle" id="modal-rename-original"></p>
+      <label class="field-block">
+        新名称
+        <input type="text" id="rename-name-input" maxlength="60" placeholder="请输入新的题库名称" />
+      </label>
+      <div class="btn-row">
+        <button id="btn-rename-cancel" class="btn btn-ghost">取消</button>
+        <button id="btn-rename-confirm" class="btn btn-primary">确认重命名</button>
+      </div>
+    </div>
+  </div>
+
   <script src="./node_modules/xlsx/dist/xlsx.full.min.js"></script>
   <script src="renderer.js"></script>
 </body>

@@ -93,6 +93,13 @@
   const btnImportCancel = $('btn-import-cancel');
   const btnImportConfirm = $('btn-import-confirm');
 
+  const modalRename = $('modal-rename');
+  const modalRenameOriginal = $('modal-rename-original');
+  const renameNameInput = $('rename-name-input');
+  const btnRenameCancel = $('btn-rename-cancel');
+  const btnRenameConfirm = $('btn-rename-confirm');
+  let pendingRenameBankId = null;
+
   // -------------------- 工具 --------------------
 
   function cellText(value) {
@@ -389,21 +396,40 @@
   function renameBank(bankId) {
     const bank = banks.find((b) => b.id === bankId);
     if (!bank) return;
-    const name = prompt('请输入新的题库名称', bank.name);
-    if (name === null) return;
-    const trimmed = cellText(name);
-    if (!trimmed) {
+    pendingRenameBankId = bankId;
+    modalRenameOriginal.textContent = '当前名称：' + bank.name;
+    renameNameInput.value = bank.name;
+    modalRename.classList.remove('hidden');
+    renameNameInput.focus();
+    renameNameInput.select();
+  }
+
+  function closeRenameModal() {
+    pendingRenameBankId = null;
+    modalRename.classList.add('hidden');
+  }
+
+  function confirmRename() {
+    if (!pendingRenameBankId) return;
+    const bank = banks.find((b) => b.id === pendingRenameBankId);
+    if (!bank) {
+      closeRenameModal();
+      return;
+    }
+    const name = cellText(renameNameInput.value);
+    if (!name) {
       alert('名称不能为空');
       return;
     }
-    if (banks.some((b) => b.id !== bankId && b.name === trimmed)) {
+    if (banks.some((b) => b.id !== pendingRenameBankId && b.name === name)) {
       alert('已存在同名题库，请更换名称');
       return;
     }
-    bank.name = trimmed;
+    bank.name = name;
     saveAll();
+    closeRenameModal();
     renderBankList();
-    if (activeBankId === bankId && !viewSetup.classList.contains('hidden')) {
+    if (activeBankId === pendingRenameBankId && !viewSetup.classList.contains('hidden')) {
       setupBankName.textContent = bank.name;
     }
   }
@@ -813,6 +839,12 @@
   btnImportConfirm.addEventListener('click', confirmImport);
   importNameInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') confirmImport();
+  });
+
+  btnRenameCancel.addEventListener('click', closeRenameModal);
+  btnRenameConfirm.addEventListener('click', confirmRename);
+  renameNameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') confirmRename();
   });
 
   btnSetupBack.addEventListener('click', () => {
